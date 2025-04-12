@@ -51,7 +51,20 @@ fn update_lyrics(lyrics_result: &Result<Option<Vec<LyricLine>>>, song: &SongInfo
             let tooltip = lyrics::format_lyrics_for_tooltip(&lyrics_data);
 
             cmus::render_lyrics(current_lyric.current_line, current_lyric.next_line, tooltip);
-            thread::sleep(Duration::from_secs(1));
+            // Calculate sleep duration based on next lyric timestamp
+            if let Some(next_timestamp) = current_lyric.next_timestamp {
+                let time_until_next = next_timestamp - song.position;
+                if time_until_next > 0.0 {
+                    // Sleep until the next lyric (with a small safety margin)
+                    thread::sleep(Duration::from_secs_f64(time_until_next.max(0.1)));
+                } else {
+                    // Fallback to shorter sleep if timing is off
+                    thread::sleep(Duration::from_millis(100));
+                }
+            } else {
+                // No next lyric, sleep for a longer time
+                thread::sleep(Duration::from_secs(2));
+            }
         }
         Ok(None) => {
             // No lyrics found

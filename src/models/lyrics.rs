@@ -6,4 +6,5 @@ pub struct LyricLine {
 pub struct LyricsStatus {
     pub current_line: String,
     pub next_line: String,
+    pub next_timestamp: Option<f64>,
 }

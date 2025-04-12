@@ -37,7 +37,7 @@ fn get_lyrics_output(
             text: "...".to_string(),
             alt: "".to_string(),
             tooltip,
-            class: "no-lyrics".to_string(),
+            class: "has-lyrics".to_string(),
         };
     }
     WaybarOutput {
