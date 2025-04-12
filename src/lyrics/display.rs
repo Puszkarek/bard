@@ -29,13 +29,7 @@ pub fn format_lyrics_for_tooltip(lyrics: &[LyricLine]) -> String {
     lyrics
         .iter()
         .map(|line| {
-            if line.timestamp > 0.0 {
-                let minutes = (line.timestamp / 60.0).floor() as i32;
-                let seconds = (line.timestamp % 60.0).floor() as i32;
-                format!("[{:02}:{:02}] {}", minutes, seconds, line.text)
-            } else {
-                line.text.clone()
-            }
+            line.text.to_string()
         })
         .collect::<Vec<String>>()
         .join("\n")
