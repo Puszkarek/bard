@@ -33,7 +33,7 @@ pub fn get_current_song() -> Result<Option<SongInfo>> {
             file_path = line[5..].to_string();
         } else if line.starts_with("position ") {
             position = line[9..].parse::<f64>()?;
-        } 
+        }
     }
 
     // If artist or title is missing, try to extract from filename

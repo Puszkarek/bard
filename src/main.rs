@@ -38,7 +38,6 @@ fn main() -> Result<()> {
         if let Err(e) = update_lyrics(&lyrics.lock().unwrap(), &unwrapped_song_info) {
             eprintln!("Error updating lyrics: {}", e);
         }
-        thread::sleep(Duration::from_secs(1));
     }
 }
 
@@ -52,15 +51,18 @@ fn update_lyrics(lyrics_result: &Result<Option<Vec<LyricLine>>>, song: &SongInfo
             let tooltip = lyrics::format_lyrics_for_tooltip(&lyrics_data);
 
             cmus::render_lyrics(current_lyric.current_line, current_lyric.next_line, tooltip);
+            thread::sleep(Duration::from_secs(1));
         }
         Ok(None) => {
             // No lyrics found
             cmus::render_song_info(song);
+            thread::sleep(Duration::from_secs(2));
         }
         Err(e) => {
             eprintln!("Error getting lyrics: {}", e);
             // Error getting lyrics
             cmus::render_song_info(song);
+            thread::sleep(Duration::from_secs(2));
         }
     }
 

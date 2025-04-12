@@ -23,11 +23,27 @@ pub fn render_song_info(song_info: &SongInfo) -> () {
 }
 
 pub fn render_lyrics(current_lyric_line: String, next_lyric_line: String, tooltip: String) -> () {
-    let output = WaybarOutput {
+    let output = get_lyrics_output(current_lyric_line, next_lyric_line, tooltip);
+    println!("{}", serde_json::to_string(&output).unwrap());
+}
+
+fn get_lyrics_output(
+    current_lyric_line: String,
+    next_lyric_line: String,
+    tooltip: String,
+) -> WaybarOutput {
+    if current_lyric_line.is_empty() {
+        return WaybarOutput {
+            text: "...".to_string(),
+            alt: "".to_string(),
+            tooltip,
+            class: "no-lyrics".to_string(),
+        };
+    }
+    WaybarOutput {
         text: current_lyric_line,
         alt: next_lyric_line,
         tooltip,
         class: "has-lyrics".to_string(),
-    };
-    println!("{}", serde_json::to_string(&output).unwrap());
+    }
 }

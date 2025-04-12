@@ -28,9 +28,7 @@ pub fn get_lyrics_status(lyrics: &[LyricLine], position: f64) -> LyricsStatus {
 pub fn format_lyrics_for_tooltip(lyrics: &[LyricLine]) -> String {
     lyrics
         .iter()
-        .map(|line| {
-            line.text.to_string()
-        })
+        .map(|line| line.text.to_string())
         .collect::<Vec<String>>()
         .join("\n")
 }
