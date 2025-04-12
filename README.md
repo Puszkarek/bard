@@ -1,6 +1,6 @@
-# cmus-waybar-lyrics
+# cmus-waybar-lyrics-rs
 
-A Go-based lyrics display for [cmus](https://github.com/cmus/cmus) music player that integrates with [Waybar](https://github.com/Alexays/Waybar) to show synchronized lyrics.
+A Rust based lyrics display for [cmus](https://github.com/cmus/cmus) music player that integrates with [Waybar](https://github.com/Alexays/Waybar) to show synchronized lyrics.
 
 ## Features
 
@@ -10,19 +10,18 @@ A Go-based lyrics display for [cmus](https://github.com/cmus/cmus) music player 
 - Automatically scrolls lyrics based on current position in song
 - Tries to guess song artist and title from file name and path
 - Runs in continuous mode to keep lyrics updated
-- Supports manual refresh via SIGUSR1 signal
 
 ## Requirements
 - cmus music player
 - Waybar
-- Go (for building)
+- Rust (for building)
 
 ## Integration with Waybar
 Add the following to your Waybar configuration file (typically `~/.config/waybar/config`):
 
 ```
  "custom/lyrics": {
-    "exec": "cmus-waybar-lyrics",
+    "exec": "cmus-waybar-lyrics-rs",
     "format": "{} <span font='11' fgalpha='50%' style='italic'>{alt}</span>",
     "restart-interval": 5,
     "return-type": "json",
@@ -56,28 +55,24 @@ Then add styling in your Waybar CSS file:
 ## Installing
 Clone this repository:
 ```
-git clone https://github.com/puszkarek/cmus-waybar-lyrics
+git clone https://github.com/puszkarek/cmus-waybar-lyrics-rs
 ```
-Build the program:
+Install the program:
 ```
-cd cmus-waybar-lyrics && go build -o cmus-waybar-lyrics
-```
-Copy the executable to your path: 
-```
-sudo cp cmus-waybar-lyrics /usr/local/bin/
+cd cmus-waybar-lyrics-rs && sudo make install
 ```
 
 ## Timestamped Lyrics Format
 For best synchronization, use lyrics with timestamps in the format:
 
 ```
-[MM:SS.CC]Lyrics line
+[MM:SS.CC] Lyrics line
 ```
 
 Example:
 ```
-[00:12.34]This is the first line
-[00:15.67]This is the second line
+[00:12.34] This is the first line
+[00:15.67] This is the second line
 ```
 
 
