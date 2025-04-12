@@ -56,7 +56,8 @@ fn update_lyrics(lyrics_result: &Result<Option<Vec<LyricLine>>>, song: &SongInfo
                 let time_until_next = next_timestamp - song.position;
                 if time_until_next > 0.0 {
                     // Sleep until the next lyric (with a small safety margin)
-                    thread::sleep(Duration::from_secs_f64(time_until_next.max(0.1)));
+                    // Also ensure the sleep time doesn't exceed a maximum value (the user could switch songs in the meantime, if if the wait is too long it would bug)
+                    thread::sleep(Duration::from_secs_f64(time_until_next.max(0.01).min(5.0)));
                 } else {
                     // Fallback to shorter sleep if timing is off
                     thread::sleep(Duration::from_millis(100));

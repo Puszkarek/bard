@@ -1,31 +1,57 @@
 use crate::models::{LyricLine, LyricsStatus};
 
+const POSITION_OFFSET_SECONDS: f64 = 1.0;
+
 pub fn get_lyrics_status(lyrics: &[LyricLine], position: f64) -> LyricsStatus {
-    // Find the lyric line that corresponds to the current position
-    let mut current_line = "";
-    let mut next_line = "";
-    let mut next_timestamp = None;
+    // Include offset in position comparison
+    let adjusted_position = position + POSITION_OFFSET_SECONDS;
 
-    for i in 0..lyrics.len() {
-        let line = &lyrics[i];
-        if line.timestamp <= position {
-            current_line = line.text.as_str();
+    let current_index = lyrics
+        .iter()
+        .enumerate()
+        .take_while(|(_, line)| line.timestamp <= adjusted_position)
+        .map(|(i, _)| i)
+        .last();
+
+    match current_index {
+        Some(i) => {
+            let current_line = &lyrics[i].text;
+
+            // Check if there's a next line
             if i < lyrics.len() - 1 {
-                let next_lyric_line = &lyrics[i + 1];
-                next_line = next_lyric_line.text.as_str();
-                next_timestamp = Some(next_lyric_line.timestamp);
+                let next_line = &lyrics[i + 1].text;
+                return LyricsStatus {
+                    current_line: current_line.to_string(),
+                    next_line: next_line.to_string(),
+                    next_timestamp: Some(lyrics[i + 1].timestamp),
+                };
             } else {
-                next_line = "";
+                return LyricsStatus {
+                    current_line: current_line.to_string(),
+                    next_line: String::new(),
+                    next_timestamp: None,
+                };
             }
-        } else {
-            break;
         }
-    }
+        None => {
+            // No current line found, check if there's an upcoming line
+            // The user is probably in the intro, so we'll return the first lyric as the next one
+            if !lyrics.is_empty() {
+                // Get the first lyric as the next one
 
-    LyricsStatus {
-        current_line: current_line.to_string(),
-        next_line: next_line.to_string(),
-        next_timestamp,
+                return LyricsStatus {
+                    current_line: String::new(),
+                    next_line: lyrics[0].text.to_string(),
+                    next_timestamp: Some(lyrics[0].timestamp),
+                };
+            }
+
+            return LyricsStatus {
+                current_line: String::new(),
+                next_line: String::new(),
+                next_timestamp: None,
+            };
+        }
     }
 }
 
