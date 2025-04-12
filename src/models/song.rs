@@ -3,5 +3,4 @@ pub struct SongInfo {
     pub title: String,
     pub file_path: String,
     pub position: f64,
-    pub duration: f64,
 }

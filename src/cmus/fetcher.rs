@@ -23,7 +23,6 @@ pub fn get_current_song() -> Result<Option<SongInfo>> {
     let mut title = String::new();
     let mut file_path = String::new();
     let mut position = 0.0;
-    let mut duration = 0.0;
 
     for line in output_str.lines() {
         if line.starts_with("tag artist ") {
@@ -34,9 +33,7 @@ pub fn get_current_song() -> Result<Option<SongInfo>> {
             file_path = line[5..].to_string();
         } else if line.starts_with("position ") {
             position = line[9..].parse::<f64>()?;
-        } else if line.starts_with("duration ") {
-            duration = line[9..].parse::<f64>()?;
-        }
+        } 
     }
 
     // If artist or title is missing, try to extract from filename
@@ -63,6 +60,5 @@ pub fn get_current_song() -> Result<Option<SongInfo>> {
         title,
         file_path,
         position,
-        duration,
     }))
 }
