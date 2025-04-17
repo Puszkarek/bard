@@ -1,5 +1,5 @@
 use anyhow::Result;
-use models::{LyricLine, SongInfo};
+use models::{LyricLine, SongInfo, SongStatus};
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
@@ -53,6 +53,11 @@ fn update_lyrics(lyrics_result: &Result<Option<Vec<LyricLine>>>, song: &SongInfo
 
     match lyrics_result {
         Ok(Some(lyrics_data)) => {
+            if song.status == SongStatus::Paused {
+                cmus::render_song_info(song);
+                thread::sleep(Duration::from_secs(1));
+                return Ok(());
+            }
             // Find current lyric based on position
             let current_lyric = lyrics::get_lyrics_status(&lyrics_data, song.position);
             let tooltip = lyrics::format_lyrics_for_tooltip(&lyrics_data);

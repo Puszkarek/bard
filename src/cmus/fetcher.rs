@@ -1,4 +1,4 @@
-use crate::models::song::SongInfo;
+use crate::models::song::{SongInfo, SongStatus};
 use anyhow::Result;
 use regex::Regex;
 use std::path::Path;
@@ -23,6 +23,7 @@ pub fn get_current_song() -> Result<Option<SongInfo>> {
     let mut title = String::new();
     let mut file_path = String::new();
     let mut position = 0.0;
+    let mut status: SongStatus = SongStatus::Playing;
 
     for line in output_str.lines() {
         if line.starts_with("tag artist ") {
@@ -33,6 +34,12 @@ pub fn get_current_song() -> Result<Option<SongInfo>> {
             file_path = line[5..].to_string();
         } else if line.starts_with("position ") {
             position = line[9..].parse::<f64>()?;
+        } else if line.starts_with("status ") {
+            status = match &line[7..] {
+                "playing" => SongStatus::Playing,
+                "paused" => SongStatus::Paused,
+                _ => SongStatus::Paused,
+            };
         }
     }
 
@@ -60,5 +67,6 @@ pub fn get_current_song() -> Result<Option<SongInfo>> {
         title,
         file_path,
         position,
+        status,
     }))
 }
