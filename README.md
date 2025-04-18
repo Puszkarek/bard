@@ -1,6 +1,6 @@
-# cmus-waybar-lyrics-rs
+# waybar-lyrics-rs
 
-A Rust based lyrics display for [cmus](https://github.com/cmus/cmus) music player that integrates with [Waybar](https://github.com/Alexays/Waybar) to show synchronized lyrics.
+A Rust based lyrics display for music player that integrates with [Waybar](https://github.com/Alexays/Waybar) to show synchronized lyrics.
 
 ## Features
 
@@ -12,7 +12,7 @@ A Rust based lyrics display for [cmus](https://github.com/cmus/cmus) music playe
 - Runs in continuous mode to keep lyrics updated
 
 ## Requirements
-- cmus music player
+- music player daemon (e.g. cmus)
 - Waybar
 - Rust (for building)
 
@@ -21,7 +21,7 @@ Add the following to your Waybar configuration file (typically `~/.config/waybar
 
 ```
  "custom/lyrics": {
-    "exec": "cmus-waybar-lyrics-rs",
+    "exec": "waybar-lyrics-rs",
     "format": "{} <span font='11' fgalpha='50%' style='italic'>{alt}</span>",
     "restart-interval": 5,
     "return-type": "json",
@@ -59,7 +59,7 @@ git clone https://github.com/puszkarek/cmus-waybar-lyrics-rs
 ```
 Install the program:
 ```
-cd cmus-waybar-lyrics-rs && sudo make install
+cd waybar-lyrics-rs && sudo make install
 ```
 
 ## Timestamped Lyrics Format

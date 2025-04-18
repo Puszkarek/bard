@@ -3,10 +3,10 @@
 build:
 	cargo build --release
 	mkdir -p bin
-	cp target/release/cmus-waybar-lyrics-rs bin/
+	cp target/release/waybar-lyrics-rs bin/
 
 install: build
-	cp bin/cmus-waybar-lyrics-rs /usr/local/bin/
+	cp bin/waybar-lyrics-rs /usr/local/bin/
 
 clean:
 	cargo clean

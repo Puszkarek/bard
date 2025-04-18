@@ -5,9 +5,9 @@ pub enum SongStatus {
 }
 
 pub struct SongInfo {
+    pub id: String,
     pub artist: String,
     pub title: String,
-    pub file_path: String,
     pub position: f64,
     pub status: SongStatus,
 }

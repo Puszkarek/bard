@@ -7,15 +7,15 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug executable 'cmus-waybar-lyrics-rs'",
+      "name": "Debug executable 'waybar-lyrics-rs'",
       "cargo": {
         "args": [
           "build",
-          "--bin=cmus-waybar-lyrics-rs",
-          "--package=cmus-waybar-lyrics-rs"
+          "--bin=waybar-lyrics-rs",
+          "--package=waybar-lyrics-rs"
         ],
         "filter": {
-          "name": "cmus-waybar-lyrics-rs",
+          "name": "waybar-lyrics-rs",
           "kind": "bin"
         }
       },

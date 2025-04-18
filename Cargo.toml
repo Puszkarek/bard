@@ -1,8 +1,8 @@
 [package]
-name = "cmus-waybar-lyrics-rs"
+name = "waybar-lyrics-rs"
 version = "0.1.0"
 edition = "2024"
-description = "A Rust-based lyrics display for cmus music player that integrates with Waybar"
+description = "A Rust-based lyrics display for music player that integrates with Waybar"
 authors = ["Guilherme Puszkarek"]
 license = "MIT"
 
