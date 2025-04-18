@@ -1,14 +1,22 @@
 use anyhow::Result;
+use dotenv::dotenv;
 use models::{LyricLine, SongInfo, SongStatus};
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
+use tokio::runtime::Runtime;
 
 mod lyrics;
 mod models;
 mod player;
+mod tidal;
 
 fn main() -> () {
+    dotenv().ok();
+
+    // Create a Tokio runtime
+    let rt = Runtime::new().expect("Failed to create Tokio runtime");
+
     // Track current song path
     let current_song_id = Arc::new(Mutex::new(String::new()));
     let lyrics = Arc::new(Mutex::new(Result::<Option<Vec<LyricLine>>>::Ok(None)));
@@ -25,7 +33,7 @@ fn main() -> () {
                     current_song_id.lock().unwrap().clear();
                     current_song_id.lock().unwrap().push_str(&song.id);
                     // Update lyrics
-                    *lyrics.lock().unwrap() = lyrics::get_lyrics(&song);
+                    *lyrics.lock().unwrap() = rt.block_on(lyrics::get_lyrics(&song));
                 }
 
                 if let Err(e) = update_lyrics(&lyrics.lock().unwrap(), &song) {

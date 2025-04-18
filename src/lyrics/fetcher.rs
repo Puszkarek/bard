@@ -6,11 +6,12 @@ use std::path::{Path, PathBuf};
 use crate::lyrics::parser::parse_lyrics;
 use crate::models::LyricLine;
 use crate::models::SongInfo;
+use crate::tidal::fetch_lyrics;
 
 // TODO: Support config file
 const LYRICS_DIR: &str = "~/lyrics";
 
-pub fn get_lyrics(song: &SongInfo) -> Result<Option<Vec<LyricLine>>> {
+pub async fn get_lyrics(song: &SongInfo) -> Result<Option<Vec<LyricLine>>> {
     // Expand the home directory in the path
     let lyrics_dir = LYRICS_DIR.replace("~", &std::env::var("HOME").unwrap_or_default());
     let lyrics_dir_path = Path::new(&lyrics_dir);
@@ -29,7 +30,10 @@ pub fn get_lyrics(song: &SongInfo) -> Result<Option<Vec<LyricLine>>> {
         return Ok(Some(lyrics));
     }
 
-    // TODO: Fetch lyrics from genius
+    // Fetch lyrics from online sources
+    if let Some(lyrics) = try_fetch_lyrics(lyrics_dir_path, song).await? {
+        return Ok(Some(lyrics));
+    }
 
     // No lyrics found
     Ok(None)
@@ -134,6 +138,22 @@ fn try_fuzzy_match(lyrics_dir_path: &Path, song: &SongInfo) -> Result<Option<Vec
             return Ok(Some(parse_lyrics(&lyrics)));
         }
     }
+
+    Ok(None)
+}
+
+async fn try_fetch_lyrics(
+    lyrics_dir_path: &Path,
+    song: &SongInfo,
+) -> Result<Option<Vec<LyricLine>>> {
+    // Fetch lyrics from Genius API
+    if let Some(lyrics) = fetch_lyrics(song).await? {
+        let lyrics_path = lyrics_dir_path.join(format!("{}.lrc", song.id));
+        fs::write(&lyrics_path, &lyrics)?;
+        return Ok(Some(parse_lyrics(&lyrics)));
+    }
+
+    // TODO: Add more methods for fetching lyrics here
 
     Ok(None)
 }
