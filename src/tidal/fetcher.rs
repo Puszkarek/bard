@@ -1,8 +1,8 @@
 use anyhow::Result;
 use reqwest::{Client, header};
 use serde_json::Value;
-use std::env::var;
 
+use crate::config::Config;
 use crate::models::SongInfo;
 
 pub async fn fetch_lyrics(song: &SongInfo) -> Result<Option<String>> {
@@ -10,7 +10,8 @@ pub async fn fetch_lyrics(song: &SongInfo) -> Result<Option<String>> {
     let client = Client::new();
 
     // Get Tidal API token from environment variables
-    let tidal_token = var("TIDAL_TOKEN")?;
+    let config = Config::load()?;
+    let tidal_token = &config.tidal_token;
 
     let track_id = get_track_id(&client, &tidal_token, &song).await?;
 

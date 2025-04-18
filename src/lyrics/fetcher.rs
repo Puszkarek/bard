@@ -3,17 +3,16 @@ use std::ffi::OsStr;
 use std::fs;
 use std::path::{Path, PathBuf};
 
+use crate::config::Config;
 use crate::lyrics::parser::parse_lyrics;
 use crate::models::LyricLine;
 use crate::models::SongInfo;
 use crate::tidal::fetch_lyrics;
 
-// TODO: Support config file
-const LYRICS_DIR: &str = "~/lyrics";
-
 pub async fn get_lyrics(song: &SongInfo) -> Result<Option<Vec<LyricLine>>> {
     // Expand the home directory in the path
-    let lyrics_dir = LYRICS_DIR.replace("~", &std::env::var("HOME").unwrap_or_default());
+    let config = Config::load()?;
+    let lyrics_dir = &config.lyrics_folder;
     let lyrics_dir_path = Path::new(&lyrics_dir);
     // Check if the directory exists
     if !lyrics_dir_path.exists() || !lyrics_dir_path.is_dir() {

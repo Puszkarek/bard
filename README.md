@@ -91,11 +91,11 @@ To get your Tidal API key:
 2. Go to the Network tab
 3. Search for "tidal"
 4. Find any request with "tidal.com" that contains a Bearer token
-5. Copy the token and paste it to `.env` file
+5. Copy the token and paste it to the config file inside `~/.config/cmd-lyrics-rs/config.json`
 
 ## License
 MIT
 
 ### Roadmap
 
-- [ ] Add custom configuration options
+- [ ] Add loading indicator when fetching lyrics

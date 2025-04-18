@@ -1,19 +1,17 @@
 use anyhow::Result;
-use dotenv::dotenv;
 use models::{LyricLine, SongInfo, SongStatus};
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 use tokio::runtime::Runtime;
 
+mod config;
 mod lyrics;
 mod models;
 mod player;
 mod tidal;
 
 fn main() -> () {
-    dotenv().ok();
-
     // Create a Tokio runtime
     let rt = Runtime::new().expect("Failed to create Tokio runtime");
 
