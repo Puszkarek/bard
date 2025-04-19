@@ -26,7 +26,7 @@ fn main() -> Result<()> {
 
     // Handle keyboard input in a separate thread
     let (tx, rx) = std::sync::mpsc::channel();
-    let input_handle = thread::spawn(move || {
+    thread::spawn(move || {
         let stdin = io::stdin();
         for evt in stdin.keys() {
             if let Ok(key) = evt {
