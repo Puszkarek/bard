@@ -2,6 +2,9 @@
 
 A Rust based lyrics display for music player to show synchronized lyrics.
 
+![BARD Banner](banner.png)
+
+
 ## Features
 
 - Displays lyrics in a terminal window
