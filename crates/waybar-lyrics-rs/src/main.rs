@@ -1,15 +1,14 @@
 use anyhow::Result;
-use models::{LyricLine, SongInfo, SongStatus};
+use shared::lyrics::{format_lyrics_for_tooltip, get_lyrics, get_lyrics_status};
+use shared::models::{LyricLine, SongInfo, SongStatus};
+use shared::player;
 use std::sync::{Arc, Mutex};
 use std::thread;
 use std::time::Duration;
 use tokio::runtime::Runtime;
 
-mod config;
-mod lyrics;
 mod models;
-mod player;
-mod tidal;
+mod waybar;
 
 fn main() -> () {
     // Create a Tokio runtime
@@ -31,7 +30,7 @@ fn main() -> () {
                     current_song_id.lock().unwrap().clear();
                     current_song_id.lock().unwrap().push_str(&song.id);
                     // Update lyrics
-                    *lyrics.lock().unwrap() = rt.block_on(lyrics::get_lyrics(&song));
+                    *lyrics.lock().unwrap() = rt.block_on(get_lyrics(&song));
                 }
 
                 if let Err(e) = update_lyrics(&lyrics.lock().unwrap(), &song) {
@@ -40,13 +39,13 @@ fn main() -> () {
             }
             Ok(None) => {
                 // No song playing
-                player::render_no_song();
+                waybar::render_no_song();
                 thread::sleep(Duration::from_secs(1));
                 continue;
             }
             Err(e) => {
                 eprintln!("Error getting current song info: {}", e);
-                player::render_no_song();
+                waybar::render_no_song();
                 thread::sleep(Duration::from_secs(2));
             }
         }
@@ -58,15 +57,15 @@ fn update_lyrics(lyrics_result: &Result<Option<Vec<LyricLine>>>, song: &SongInfo
     match lyrics_result {
         Ok(Some(lyrics_data)) => {
             if song.status == SongStatus::Paused {
-                player::render_song_info(song);
+                waybar::render_song_info(song);
                 thread::sleep(Duration::from_secs(1));
                 return Ok(());
             }
             // Find current lyric line based on position
-            let current_lyric = lyrics::get_lyrics_status(&lyrics_data, song.position);
-            let tooltip = lyrics::format_lyrics_for_tooltip(&lyrics_data);
+            let current_lyric = get_lyrics_status(&lyrics_data, song.position);
+            let tooltip = format_lyrics_for_tooltip(&lyrics_data);
 
-            player::render_lyrics(current_lyric.current_line, current_lyric.next_line, tooltip);
+            waybar::render_lyrics(current_lyric.current_line, current_lyric.next_line, tooltip);
             // Calculate sleep duration based on next lyric timestamp
             if let Some(next_timestamp) = current_lyric.next_timestamp {
                 let time_until_next = next_timestamp - song.position;
@@ -85,13 +84,13 @@ fn update_lyrics(lyrics_result: &Result<Option<Vec<LyricLine>>>, song: &SongInfo
         }
         Ok(None) => {
             // No lyrics found
-            player::render_song_info(song);
+            waybar::render_song_info(song);
             thread::sleep(Duration::from_secs(2));
         }
         Err(e) => {
             eprintln!("Error getting lyrics: {}", e);
             // Error getting lyrics
-            player::render_song_info(song);
+            waybar::render_song_info(song);
             thread::sleep(Duration::from_secs(2));
         }
     }

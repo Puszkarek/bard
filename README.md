@@ -18,11 +18,11 @@ A Rust based lyrics display for music player that integrates with [Waybar](https
 ## Requirements
 - music player daemon (e.g. cmus)
 - Rust (for building)
-# Optionals
+## Optionals
 - Waybar
 
 ## Run on terminal
-TODO
+Just run `lyrics-rs`
 
 ## Run with Waybar
 Add the following to your Waybar configuration file (typically `~/.config/waybar/config`):
@@ -81,6 +81,49 @@ Example:
 ```
 [00:12.34] This is the first line
 [00:15.67] This is the second line
+```
+
+## Configuration
+
+The application uses a JSON configuration file located at `~/.config/cmd-lyrics-rs/config.json`. The file is automatically created with default values on first run.
+
+### Configuration File Location
+
+The config file is stored at:
+```
+~/.config/cmd-lyrics-rs/config.json
+```
+
+### Configuration Options
+
+The configuration file contains the following options:
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `tidal_token` | Your Tidal API token for fetching song information | Empty string (must be set by user) |
+| `lyrics_folder` | Directory where lyrics files are stored | `~/lyrics` |
+| `colors` | Terminal UI color configuration | See below |
+
+#### Color Configuration
+
+The `colors` section contains the following options:
+
+| Option | Description | Default |
+|--------|-------------|---------|
+| `default_fg` | Default text color for non-focused elements | `"gray"` |
+| `focused_fg` | Text color for currently active/focused elements | `"white"` |
+
+### Example Configuration
+
+```json
+{
+  "tidal_token": "your-tidal-token-here",
+  "lyrics_folder": "/home/user/lyrics",
+  "colors": {
+    "default_fg": "gray",
+    "focused_fg": "white"
+  }
+}
 ```
 
 ## Supported Online Sources

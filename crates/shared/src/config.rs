@@ -4,9 +4,25 @@ use std::fs;
 use std::path::{Path, PathBuf};
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct ColorConfig {
+    pub default_fg: String,
+    pub focused_fg: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
     pub tidal_token: String,
     pub lyrics_folder: String,
+    pub colors: ColorConfig,
+}
+
+impl Default for ColorConfig {
+    fn default() -> Self {
+        Self {
+            focused_fg: "white".to_string(),
+            default_fg: "gray".to_string(),
+        }
+    }
 }
 
 impl Config {
@@ -33,6 +49,7 @@ impl Config {
             lyrics_folder: dirs::home_dir()
                 .map(|p| p.join("lyrics").to_string_lossy().to_string())
                 .unwrap_or_else(|| String::from("./lyrics")),
+            colors: ColorConfig::default(),
         };
 
         let config_str = serde_json::to_string_pretty(&default_config)?;

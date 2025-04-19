@@ -1,4 +1,6 @@
-use crate::models::{SongInfo, WaybarOutput};
+use shared::models::SongInfo;
+
+use crate::models::WaybarOutput;
 
 pub fn render_no_song() -> () {
     // No song playing

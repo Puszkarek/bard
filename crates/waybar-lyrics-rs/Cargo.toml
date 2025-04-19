@@ -1,0 +1,18 @@
+[package]
+name = "waybar-lyrics-rs"
+version = "0.8.0"
+edition = "2024"
+description = "Waybar integration for displaying lyrics"
+authors = ["Guilherme Puszkarek"]
+license = "MIT"
+
+[dependencies]
+# Reference the shared crate
+shared = { path = "../shared" }
+
+# Waybar specific dependencies
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+anyhow = "1.0"
+tokio = { version = "1.44.2", features = ["rt", "macros"] }
+signal-hook = "0.3"

@@ -1,0 +1,18 @@
+[package]
+name = "lyrics-rs"
+version = "0.8.0"
+edition = "2024"
+description = "Terminal-based lyrics display"
+authors = ["Guilherme Puszkarek"]
+license = "MIT"
+
+[dependencies]
+# Reference the shared crate
+shared = { path = "../shared" }
+
+# Terminal UI specific dependencies
+anyhow = "1.0"
+tokio = { version = "1.44.2", features = ["rt", "macros"] }
+signal-hook = "0.3"
+termion = "4.0.5"
+ratatui = { version = "0.29.0", features = ["termion"] }
