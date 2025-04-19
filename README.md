@@ -1,11 +1,11 @@
-# cmd-lyrics-rs
+# B.A.R.D - Ballad Assistant Rhythm Debugger
 
-A Rust based lyrics display for music player that integrates with [Waybar](https://github.com/Alexays/Waybar) to show synchronized lyrics.
+A Rust based lyrics display for music player to show synchronized lyrics.
 
 ## Features
 
 - Displays lyrics in a terminal window
-- Displays current lyrics in `Waybar` based on song position
+- Displays current lyrics in [Waybar](https://github.com/Alexays/Waybar) based on song position
 - Reads lyrics from music file tags
 - Fetches lyrics from online sources if not found in file tags
 - Saves lyrics to file for future use
@@ -16,20 +16,22 @@ A Rust based lyrics display for music player that integrates with [Waybar](https
 - Runs in continuous mode to keep lyrics updated
 
 ## Requirements
-- music player daemon (e.g. cmus)
+- playerctl
+- music player daemon
 - Rust (for building)
+
 ## Optionals
 - Waybar
 
 ## Run on terminal
-Just run `lyrics-rs`
+Just run `bard`
 
 ## Run with Waybar
 Add the following to your Waybar configuration file (typically `~/.config/waybar/config`):
 
 ```
  "custom/lyrics": {
-    "exec": "waybar-lyrics-rs",
+    "exec": "waybar-bard",
     "format": "{} <span font='11' fgalpha='50%' style='italic'>{alt}</span>",
     "restart-interval": 5,
     "return-type": "json",
@@ -63,11 +65,11 @@ Then add styling in your Waybar CSS file:
 ## Installing
 Clone this repository:
 ```
-git clone https://github.com/puszkarek/cmd-lyrics-rs
+git clone https://github.com/puszkarek/bard
 ```
 Install the program:
 ```
-cd cmd-lyrics-rs && sudo make install
+cd bard && sudo make install
 ```
 
 ## Timestamped Lyrics Format
@@ -85,13 +87,13 @@ Example:
 
 ## Configuration
 
-The application uses a JSON configuration file located at `~/.config/cmd-lyrics-rs/config.json`. The file is automatically created with default values on first run.
+The application uses a JSON configuration file located at `~/.config/bard/config.json`. The file is automatically created with default values on first run.
 
 ### Configuration File Location
 
 The config file is stored at:
 ```
-~/.config/cmd-lyrics-rs/config.json
+~/.config/bard/config.json
 ```
 
 ### Configuration Options
@@ -134,7 +136,7 @@ To get your Tidal API key:
 2. Go to the Network tab
 3. Search for "tidal"
 4. Find any request with "tidal.com" that contains a Bearer token
-5. Copy the token and paste it to the config file inside `~/.config/cmd-lyrics-rs/config.json`
+5. Copy the token and paste it to the config file inside `~/.config/bard/config.json`
 
 ## License
 MIT

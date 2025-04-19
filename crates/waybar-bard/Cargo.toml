@@ -1,5 +1,5 @@
 [package]
-name = "waybar-lyrics-rs"
+name = "waybar-bard"
 version = "0.8.0"
 edition = "2024"
 description = "Waybar integration for displaying lyrics"

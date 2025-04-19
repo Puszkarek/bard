@@ -66,6 +66,18 @@ dependencies = [
 ]
 
 [[package]]
+name = "bard"
+version = "0.8.0"
+dependencies = [
+ "anyhow",
+ "ratatui",
+ "shared",
+ "signal-hook",
+ "termion",
+ "tokio",
+]
+
+[[package]]
 name = "base64"
 version = "0.22.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -851,18 +863,6 @@ source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "234cf4f4a04dc1f57e24b96cc0cd600cf2af460d4161ac5ecdd0af8e1f3b2a38"
 dependencies = [
  "hashbrown",
-]
-
-[[package]]
-name = "lyrics-rs"
-version = "0.8.0"
-dependencies = [
- "anyhow",
- "ratatui",
- "shared",
- "signal-hook",
- "termion",
- "tokio",
 ]
 
 [[package]]
@@ -1901,7 +1901,7 @@ dependencies = [
 ]
 
 [[package]]
-name = "waybar-lyrics-rs"
+name = "waybar-bard"
 version = "0.8.0"
 dependencies = [
  "anyhow",

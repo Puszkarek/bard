@@ -1,7 +1,7 @@
 [workspace]
 resolver = "2"
 members = [
-    "crates/waybar-lyrics-rs",
-    "crates/lyrics-rs",
+    "crates/waybar-bard",
+    "crates/bard",
     "crates/shared",
 ]

@@ -66,7 +66,7 @@ impl Config {
 fn get_config_path() -> Result<PathBuf> {
     let config_dir = dirs::config_dir()
         .ok_or_else(|| anyhow::anyhow!("Could not determine config directory"))?
-        .join("cmd-lyrics-rs");
+        .join("bard");
 
     Ok(config_dir.join("config.json"))
 }

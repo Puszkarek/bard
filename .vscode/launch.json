@@ -7,15 +7,15 @@
     {
       "type": "lldb",
       "request": "launch",
-      "name": "Debug executable 'waybar-lyrics-rs'",
+      "name": "Debug executable 'waybar-bard'",
       "cargo": {
         "args": [
           "build",
-          "--bin=waybar-lyrics-rs",
-          "--package=waybar-lyrics-rs"
+          "--bin=waybar-bard",
+          "--package=waybar-bard"
         ],
         "filter": {
-          "name": "waybar-lyrics-rs",
+          "name": "waybar-bard",
           "kind": "bin"
         }
       },
