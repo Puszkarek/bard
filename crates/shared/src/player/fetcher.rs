@@ -1,15 +1,36 @@
-use crate::models::song::{SongInfo, SongStatus};
+use crate::{
+    config::Config,
+    models::song::{SongInfo, SongStatus},
+};
 use anyhow::Result;
 use std::process::Command;
 
-pub fn get_current_song() -> Result<Option<SongInfo>> {
-    let output = Command::new("playerctl")
-        .args([
-            "metadata",
-            "--format",
-            "{{status}}\n{{artist}}\n{{title}}\n{{position}}",
-        ])
-        .output()?;
+pub fn get_current_song(config: &Config) -> Result<Option<SongInfo>> {
+    let mut args = vec![
+        "metadata".to_string(),
+        "--format".to_string(),
+        "{{status}}\n{{artist}}\n{{title}}\n{{position}}".to_string(),
+    ];
+
+    // Add ignore-player flags for each player to ignore
+    if let Some(ignore_list) = &config.ignore_players {
+        if !ignore_list.is_empty() {
+            let ignore_list = ignore_list.join(",");
+            args.push("--ignore-player".to_string());
+            args.push(ignore_list);
+        }
+    }
+
+    // If allowed_players is specified, add them as a comma-separated list
+    if let Some(allow_list) = &config.allowed_players {
+        if !allow_list.is_empty() {
+            let allow_list = allow_list.join(",");
+            args.push("--player".to_string());
+            args.push(allow_list);
+        }
+    }
+
+    let output = Command::new("playerctl").args(args).output()?;
 
     if !output.status.success() {
         return Ok(None);

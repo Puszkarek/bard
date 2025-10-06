@@ -1,4 +1,5 @@
 use anyhow::Result;
+use shared::config::Config;
 use shared::lyrics::{get_lyrics, get_lyrics_status};
 use shared::models::{LyricLine, SongInfo, SongStatus};
 use shared::player;
@@ -15,6 +16,9 @@ mod terminal;
 use terminal::TerminalDisplay;
 
 fn main() -> Result<()> {
+    // Load configuration
+    let config = Config::load()?;
+
     // Create a Tokio runtime
     let rt = Runtime::new().expect("Failed to create Tokio runtime");
     // Create terminal display
@@ -48,7 +52,7 @@ fn main() -> Result<()> {
         }
 
         // Get current song info from player
-        let song_info = player::get_current_song();
+        let song_info = player::get_current_song(&config);
 
         match song_info {
             Ok(Some(song)) => {

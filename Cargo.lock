@@ -67,7 +67,7 @@ dependencies = [
 
 [[package]]
 name = "bard"
-version = "0.8.0"
+version = "0.9.0"
 dependencies = [
  "anyhow",
  "ratatui",
@@ -1374,7 +1374,7 @@ dependencies = [
 
 [[package]]
 name = "shared"
-version = "0.8.0"
+version = "0.9.0"
 dependencies = [
  "anyhow",
  "dirs",
@@ -1902,7 +1902,7 @@ dependencies = [
 
 [[package]]
 name = "waybar-bard"
-version = "0.8.0"
+version = "0.9.0"
 dependencies = [
  "anyhow",
  "serde",

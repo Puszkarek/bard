@@ -10,10 +10,18 @@ pub struct ColorConfig {
 }
 
 #[derive(Debug, Serialize, Deserialize)]
+pub struct TidalConfig {
+    pub access_token: String,
+    pub refresh_token: String,
+}
+
+#[derive(Debug, Serialize, Deserialize)]
 pub struct Config {
-    pub tidal_token: String,
+    pub tidal: Option<TidalConfig>,
     pub lyrics_folder: String,
     pub colors: ColorConfig,
+    pub allowed_players: Option<Vec<String>>,
+    pub ignore_players: Option<Vec<String>>,
 }
 
 impl Default for ColorConfig {
@@ -38,6 +46,13 @@ impl Config {
         Ok(config)
     }
 
+    pub fn save(&self) -> Result<()> {
+        let config_path = get_config_path()?;
+        let config_str = serde_json::to_string_pretty(self)?;
+        fs::write(config_path, config_str)?;
+        Ok(())
+    }
+
     fn create_default_config(config_path: &Path) -> Result<Self> {
         // Create parent directories if they don't exist
         if let Some(parent) = config_path.parent() {
@@ -45,11 +60,13 @@ impl Config {
         }
 
         let default_config = Config {
-            tidal_token: String::new(),
+            tidal: None,
             lyrics_folder: dirs::home_dir()
                 .map(|p| p.join("lyrics").to_string_lossy().to_string())
                 .unwrap_or_else(|| String::from("./lyrics")),
             colors: ColorConfig::default(),
+            allowed_players: None,
+            ignore_players: None,
         };
 
         let config_str = serde_json::to_string_pretty(&default_config)?;
@@ -57,7 +74,6 @@ impl Config {
 
         // Let the user know they need to edit the config
         println!("Created default config at: {}", config_path.display());
-        println!("Please edit this file to add your Tidal token before using.");
 
         Ok(default_config)
     }

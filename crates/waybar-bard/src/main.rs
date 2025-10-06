@@ -1,4 +1,5 @@
 use anyhow::Result;
+use shared::config::Config;
 use shared::lyrics::{format_lyrics_for_tooltip, get_lyrics, get_lyrics_status};
 use shared::models::{LyricLine, SongInfo, SongStatus};
 use shared::player;
@@ -11,6 +12,9 @@ mod models;
 mod waybar;
 
 fn main() -> () {
+    // Load configuration
+    let config = Config::load().expect("Failed to load config");
+
     // Create a Tokio runtime
     let rt = Runtime::new().expect("Failed to create Tokio runtime");
 
@@ -21,7 +25,7 @@ fn main() -> () {
     // Main loop
     loop {
         // Get current song info from player
-        let song_info = player::get_current_song();
+        let song_info = player::get_current_song(&config);
 
         match song_info {
             Ok(Some(song)) => {
