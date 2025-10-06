@@ -20,6 +20,8 @@ pub struct Config {
     pub tidal: Option<TidalConfig>,
     pub lyrics_folder: String,
     pub colors: ColorConfig,
+    pub allowed_players: Option<Vec<String>>,
+    pub ignore_players: Option<Vec<String>>,
 }
 
 impl Default for ColorConfig {
@@ -63,6 +65,8 @@ impl Config {
                 .map(|p| p.join("lyrics").to_string_lossy().to_string())
                 .unwrap_or_else(|| String::from("./lyrics")),
             colors: ColorConfig::default(),
+            allowed_players: None,
+            ignore_players: None,
         };
 
         let config_str = serde_json::to_string_pretty(&default_config)?;

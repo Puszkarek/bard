@@ -113,11 +113,13 @@ The config file is stored at:
 
 The configuration file contains the following options:
 
-| Option          | Description                             | Default    |
-| --------------- | --------------------------------------- | ---------- |
-| `tidal`         | Tidal authentication configuration      | Optional   |
-| `lyrics_folder` | Directory where lyrics files are stored | `~/lyrics` |
-| `colors`        | Terminal UI color configuration         | See below  |
+| Option            | Description                                                               | Default    |
+| ----------------- | ------------------------------------------------------------------------- | ---------- |
+| `tidal`           | Tidal authentication configuration                                        | Optional   |
+| `lyrics_folder`   | Directory where lyrics files are stored                                   | `~/lyrics` |
+| `colors`          | Terminal UI color configuration                                           | See below  |
+| `allowed_players` | List of players to include (if set, only these players will be monitored) | Optional   |
+| `ignore_players`  | List of players to ignore (if set, these players will be excluded)        | Optional   |
 
 #### Tidal Configuration (Optional)
 
@@ -149,7 +151,9 @@ The `colors` section contains the following options:
   "colors": {
     "default_fg": "gray",
     "focused_fg": "white"
-  }
+  },
+  "allowed_players": ["spotify", "vlc"],
+  "ignore_players": ["firefox", "chromium"]
 }
 ```
 
