@@ -2,6 +2,7 @@ use anyhow::Result;
 use reqwest::{Client, header};
 use serde_json::Value;
 
+use super::auth::TidalAuth;
 use crate::config::Config;
 use crate::models::SongInfo;
 
@@ -9,15 +10,29 @@ pub async fn fetch_lyrics(song: &SongInfo) -> Result<Option<String>> {
     // Create a new reqwest client
     let client = Client::new();
 
-    // Get Tidal API token from environment variables
+    // Get Tidal configuration
     let config = Config::load()?;
-    let tidal_token = &config.tidal_token;
 
-    let track_id = get_track_id(&client, &tidal_token, &song).await?;
+    // Check if Tidal is configured
+    let tidal_config = match &config.tidal {
+        Some(tidal) => tidal,
+        None => return Ok(None), // No Tidal config, return None to indicate no lyrics available
+    };
+
+    // Create authentication handler
+    let mut tidal_auth = TidalAuth::new(
+        tidal_config.access_token.clone(),
+        tidal_config.refresh_token.clone(),
+    );
+
+    // Ensure we have a valid access token
+    let access_token = tidal_auth.get_valid_access_token().await?;
+
+    let track_id = get_track_id(&client, &access_token, &song).await?;
 
     match track_id {
         Some(id) => {
-            return get_lyrics(&client, &tidal_token, &id).await;
+            return get_lyrics(&client, &access_token, &id).await;
         }
         None => {
             return Ok(None);
@@ -25,7 +40,7 @@ pub async fn fetch_lyrics(song: &SongInfo) -> Result<Option<String>> {
     }
 }
 
-async fn get_lyrics(client: &Client, token: &String, track_id: &String) -> Result<Option<String>> {
+async fn get_lyrics(client: &Client, token: &str, track_id: &str) -> Result<Option<String>> {
     // Create the Tidal API URL
     let url = format!("https://api.tidal.com/v1/tracks/{}/lyrics", track_id);
 
@@ -54,7 +69,7 @@ async fn get_lyrics(client: &Client, token: &String, track_id: &String) -> Resul
     Ok(None)
 }
 
-async fn get_track_id(client: &Client, token: &String, song: &SongInfo) -> Result<Option<String>> {
+async fn get_track_id(client: &Client, token: &str, song: &SongInfo) -> Result<Option<String>> {
     // https://tidal.com/v2/search/?includeContributors=true&includeDidYouMean=true&includeUserPlaylists=true&limit=50&query={}&supportsUserData=true&types=ARTISTS%2CALBUMS%2CTRACKS%2CVIDEOS%2CPLAYLISTS%2CUSERPROFILES&countryCode=BR&locale=en_US&deviceType=BROWSER
     let url = "https://api.tidal.com/v2/search/";
 
